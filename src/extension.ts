@@ -24,7 +24,9 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      pattern = new RegExp(result);
+      pattern = new RegExp(result, "gms");
+
+      findContext();
     }
   );
 
@@ -63,7 +65,7 @@ const decorationType = window.createTextEditorDecorationType({
 export function deactivate() {}
 
 function findContext() {
-  console.log("find context");
+  console.log("find context", pattern.source);
 
   if (!activeEditor || !activeEditor.document || !window) {
     return;
@@ -72,8 +74,10 @@ function findContext() {
   console.log("matching");
 
   var text = activeEditor.document.getText();
-  var matches: { [key: string]: vscode.DecorationOptions[] } = {};
+  var matches: vscode.DecorationOptions[] = [];
   var match;
+
+  let count = 0;
 
   while ((match = pattern.exec(text))) {
     var startPos = activeEditor.document.positionAt(match.index);
@@ -94,21 +98,19 @@ function findContext() {
 
     var matchedValue = match[0];
 
-    if (matches[matchedValue]) {
-      matches[matchedValue].push(decoration);
-    } else {
-      matches[matchedValue] = [decoration];
+    matches.push(decoration);
+
+    if (count++ > text.length) {
+      console.error("stopped an infinite loop");
+      break;
     }
   }
 
   // add a box for each one
-  for (let v in matches) {
-    var rangeOption = matches[v] ? matches[v] : [];
 
-    console.log("add border", rangeOption);
+  console.log("add border", matches);
 
-    activeEditor.setDecorations(decorationType, rangeOption);
-  }
+  activeEditor.setDecorations(decorationType, matches);
 
   // get text for active file
 
