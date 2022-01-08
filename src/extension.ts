@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { RegexViewProvider } from "./RegexViewProvider";
 
 let activeEditor: vscode.TextEditor | undefined;
 
@@ -51,6 +52,17 @@ export function activate(context: vscode.ExtensionContext) {
     },
     null,
     context.subscriptions
+  );
+
+  const provider = new RegexViewProvider(context.extensionUri);
+
+  console.log("regex view", provider);
+
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      RegexViewProvider.viewType,
+      provider
+    )
   );
 
   context.subscriptions.push(disposable);
