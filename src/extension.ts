@@ -57,6 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // need to use a single decorator type so that updates work
+// see: https://github.com/microsoft/vscode-extension-samples/issues/22#issuecomment-321555992
 const decorationType = window.createTextEditorDecorationType({
   border: "1px solid red",
 });

@@ -2,6 +2,7 @@
   "name": "regex-context",
   "displayName": "regex-context",
   "description": "Apply regex in a given context",
+  "publisher": "byronwall",
   "repository": "https://github.com/byronwall/regex-context",
   "license": "MIT",
   "version": "0.0.1",
