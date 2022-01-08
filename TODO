@@ -1,0 +1,5 @@
+Proof of concept:
+    ☐ Need to create proper names for the commands
+    ☐ Create a WebView which is able to show some input boxes
+    ☐ Build the find context in the WebView
+    ☐ Build an initial replace mechanism in the WebView
