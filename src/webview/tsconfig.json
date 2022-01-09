@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "../../out/webview/",
+    "composite": true,
+    "lib": ["ES2020", "DOM"],
+    "module": "CommonJS",
+    "noImplicitAny": true
+  },
+  "references": [{ "path": "../extension" }]
+}

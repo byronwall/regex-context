@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
-import { RegexViewProvider } from "./RegexViewProvider";
+import { RegexStateData, RegexViewProvider } from "./RegexViewProvider";
 
 let activeEditor: vscode.TextEditor | undefined;
 
 let window = vscode.window;
 let workspace = vscode.workspace;
 
-let pattern: RegExp = /bat.*?cat/gms;
+const GLOBAL_STATE: RegexStateData = { isActive: true, pattern: "xxx" };
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "regex-context" is now active!');
@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
     async () => {
       const result = await window.showInputBox({
         prompt: "Enter the regex",
-        value: pattern.source,
+        value: GLOBAL_STATE.pattern,
       });
 
       console.log("result", result);
@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      pattern = new RegExp(result, "gms");
+      GLOBAL_STATE.pattern = result;
 
       findContext();
     }
@@ -56,8 +56,6 @@ export function activate(context: vscode.ExtensionContext) {
 
   const provider = new RegexViewProvider(context.extensionUri);
 
-  console.log("regex view", provider);
-
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
       RegexViewProvider.viewType,
@@ -77,20 +75,36 @@ const decorationType = window.createTextEditorDecorationType({
 // this method is called when your extension is deactivated
 export function deactivate() {}
 
+export function updateState(newState: RegexStateData) {
+  console.log("update state extension", { ...GLOBAL_STATE }, newState);
+  Object.assign(GLOBAL_STATE, newState);
+
+  findContext();
+}
+
 function findContext() {
-  console.log("find context", pattern.source);
+  console.log("find context", GLOBAL_STATE.pattern);
 
   if (!activeEditor || !activeEditor.document || !window) {
     return;
   }
 
-  console.log("matching");
+  // short circuit if not active
+  if (!GLOBAL_STATE.isActive || GLOBAL_STATE.pattern === "") {
+    console.log("not active, remove all");
+    activeEditor.setDecorations(decorationType, []);
+    return;
+  }
+
+  console.log("matching", GLOBAL_STATE);
 
   var text = activeEditor.document.getText();
   var matches: vscode.DecorationOptions[] = [];
   var match;
 
   let count = 0;
+
+  const pattern = new RegExp(GLOBAL_STATE.pattern, "gms");
 
   while ((match = pattern.exec(text))) {
     var startPos = activeEditor.document.positionAt(match.index);

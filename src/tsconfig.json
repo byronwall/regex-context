@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "../out",
+    "rootDir": "."
+  },
+  "files": [],
+  "exclude": ["node_modules", ".vscode-test"],
+  "references": [{ "path": "./webview" }, { "path": "./extension" }]
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src <%= cspSource %>; script-src 'nonce-<%= nonce %>';"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="<%- styleResetUri %>" rel="stylesheet" />
+    <link href="<%- styleVSCodeUri %>" rel="stylesheet" />
+    <link href="<%- styleMainUri %>" rel="stylesheet" />
+
+    <title>Regex Context</title>
+  </head>
+  <body>
+    <h3>context</h3>
+    <div class="flex">
+      <input type="text" id="txtPattern" placeholder="pattern" />
+      <input type="checkbox" id="btnPattern" />
+    </div>
+    <h3>find / replace</h3>
+    <div class="flex">
+      <input type="text" id="txtFind" placeholder="Find" />
+      <button id="btnFind">X</button>
+    </div>
+    <div class="flex">
+      <input type="text" id="txtReplace" placeholder="Replace" />
+      <button id="btnReplace">X</button>
+    </div>
+
+    <script nonce="<%= nonce %>">
+      var exports = {};
+    </script>
+    <script nonce="<%= nonce %>" src="<%- scriptUri %>"></script>
+  </body>
+</html>
