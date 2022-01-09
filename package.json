@@ -45,11 +45,12 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "tsc -b src",
     "watch": "tsc -b src -w",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "publish": "npx vsce publish"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
