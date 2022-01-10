@@ -14,8 +14,11 @@ console.log("running the main.ts code ");
   const vscode = acquireVsCodeApi<RegexStateData>();
 
   const oldState: RegexStateData = vscode.getState() || {
+    shouldShowFind: true,
     isActive: true,
     pattern: "",
+    find: "",
+    replace: "",
   };
 
   function updateState<K extends keyof RegexStateData>(
@@ -24,12 +27,16 @@ console.log("running the main.ts code ");
   ) {
     oldState[key] = value;
 
-    console.log("new state ", oldState);
-
     vscode.setState(oldState);
 
     vscode.postMessage({ type: "stateUpdate", value: oldState });
   }
+
+  function handleReplaceClick() {
+    vscode.postMessage({ type: "doReplace", value: oldState });
+  }
+
+  updateDomFromState(oldState);
 
   window.addEventListener("DOMContentLoaded", (event) => {
     console.log("DOM fully loaded and parsed");
@@ -38,10 +45,10 @@ console.log("running the main.ts code ");
       .getElementById("btnPattern")
       ?.addEventListener("change", (event: any) => {
         const newCheckedState = (event.target as any).checked;
-        console.log("check tick xxx", newCheckedState);
 
         updateState("isActive", newCheckedState);
       });
+
     document
       .getElementById("txtPattern")
       ?.addEventListener("change", (event: any) => {
@@ -50,6 +57,35 @@ console.log("running the main.ts code ");
 
         updateState("pattern", newValue);
       });
+    document
+      .getElementById("txtFind")
+      ?.addEventListener("change", (event: any) => {
+        // @ts-ignore
+        const newValue = event.target.value;
+
+        updateState("find", newValue);
+      });
+
+    document
+      .getElementById("checkShowFind")
+      ?.addEventListener("change", (event: any) => {
+        const newCheckedState = (event.target as any).checked;
+
+        updateState("shouldShowFind", newCheckedState);
+      });
+
+    document
+      .getElementById("txtReplace")
+      ?.addEventListener("change", (event: any) => {
+        // @ts-ignore
+        const newValue = event.target.value;
+
+        updateState("replace", newValue);
+      });
+
+    document.getElementById("btnReplace")?.addEventListener("click", () => {
+      handleReplaceClick();
+    });
   });
 
   // Handle messages sent from the extension to the webview
@@ -61,3 +97,20 @@ console.log("running the main.ts code ");
     }
   });
 })();
+
+function updateDomFromState(oldState: RegexStateData) {
+  console.log("XXX update dom from state", oldState);
+
+  document
+    .getElementById("btnPattern")
+    .setAttribute("checked", "" + oldState.isActive);
+
+  document.getElementById("txtFind").setAttribute("value", oldState.find);
+
+  document
+    .getElementById("checkShowFind")
+    .setAttribute("checked", "" + oldState.shouldShowFind);
+
+  document.getElementById("txtReplace").setAttribute("value", oldState.replace);
+  document.getElementById("txtPattern").setAttribute("value", oldState.pattern);
+}

@@ -1,22 +1,27 @@
 import * as vscode from "vscode";
 import * as ejs from "ejs";
 import { getNonce } from "./helpers";
-import { updateState } from "./extension";
+import { updateState } from "./state";
+import { doReplace } from "./regex";
 
 interface MessageStateUpdate {
   type: "stateUpdate";
   value: RegexStateData;
 }
-interface MessageStateXXX {
-  type: "XXX";
-  value: RegexStateData;
+interface MessageStateDoReplace {
+  type: "doReplace";
 }
 
-export type Messages = MessageStateUpdate | MessageStateXXX;
+export type Messages = MessageStateUpdate | MessageStateDoReplace;
 
 export interface RegexStateData {
   pattern: string;
+
+  find: string;
+  replace: string;
+
   isActive: boolean;
+  shouldShowFind: boolean;
 }
 
 export class RegexViewProvider implements vscode.WebviewViewProvider {
@@ -37,7 +42,6 @@ export class RegexViewProvider implements vscode.WebviewViewProvider {
 
     webviewView.webview.options = {
       enableScripts: true,
-
       localResourceRoots: [this._extensionUri],
     };
 
@@ -46,27 +50,16 @@ export class RegexViewProvider implements vscode.WebviewViewProvider {
     webviewView.webview.onDidReceiveMessage((data: Messages) => {
       switch (data.type) {
         case "stateUpdate": {
-          console.log("state update", data.value);
-
           updateState(data.value);
 
           break;
         }
+
+        case "doReplace": {
+          doReplace();
+        }
       }
     });
-  }
-
-  public addColor() {
-    if (this._view) {
-      this._view.show?.(true); // `show` is not implemented in 1.49 but is for 1.50 insiders
-      this._view.webview.postMessage({ type: "addColor" });
-    }
-  }
-
-  public clearColors() {
-    if (this._view) {
-      this._view.webview.postMessage({ type: "clearColors" });
-    }
   }
 
   private async getHtmlForWebview(webview: vscode.Webview) {

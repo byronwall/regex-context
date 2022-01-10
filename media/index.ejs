@@ -20,16 +20,18 @@
     <h3>context</h3>
     <div class="flex">
       <input type="text" id="txtPattern" placeholder="pattern" />
-      <input type="checkbox" id="btnPattern" />
+      <input type="checkbox" id="btnPattern" checked="true" />
     </div>
     <h3>find / replace</h3>
     <div class="flex">
       <input type="text" id="txtFind" placeholder="Find" />
-      <button id="btnFind">X</button>
+      <input type="checkbox" id="checkShowFind" checked="true" />
     </div>
     <div class="flex">
       <input type="text" id="txtReplace" placeholder="Replace" />
-      <button id="btnReplace">X</button>
+    </div>
+    <div>
+      <button id="btnReplace">replace</button>
     </div>
 
     <script nonce="<%= nonce %>">
