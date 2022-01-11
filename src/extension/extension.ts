@@ -11,7 +11,7 @@ const workspace = vscode.workspace;
 export const GLOBAL_STATE: RegexStateData = {
   isActive: true,
   shouldShowFind: true,
-  pattern: "xxx",
+  patterns: ["xxx"],
   find: "yyy",
   replace: "zzz",
 };

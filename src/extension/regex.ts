@@ -4,8 +4,8 @@ import { activeEditor, GLOBAL_STATE } from "./extension";
 export function getContextPosRanges(activeEditor: vscode.TextEditor) {
   const text = activeEditor.document.getText();
 
-  const pattern = new RegExp(GLOBAL_STATE.pattern, "gms");
-  const posRanges: vscode.Range[] = [];
+  let posRanges: vscode.Range[] = [];
+  const pattern = new RegExp(GLOBAL_STATE.patterns[0], "gms");
 
   let count = 0;
   let match;
@@ -23,19 +23,33 @@ export function getContextPosRanges(activeEditor: vscode.TextEditor) {
     }
   }
 
+  // for each match -- need to process the sub ranges with the next pattern
+  GLOBAL_STATE.patterns.forEach((regexStr, idx) => {
+    // skip first
+    if (idx === 0) {
+      return;
+    }
+
+    const pattern = new RegExp(regexStr, "gms");
+
+    posRanges = posRanges.flatMap((range) =>
+      getFindPosRanges(activeEditor!, range, pattern)
+    );
+  });
+
   return posRanges;
 }
 
 export function getFindPosRanges(
   activeEditor: vscode.TextEditor,
-  contextRange: vscode.Range
+  contextRange: vscode.Range,
+  pattern: RegExp
 ) {
   const text = activeEditor.document.getText(contextRange);
 
   // need to add the start in since we are only looking at a subset of text
   const startIndex = activeEditor.document.offsetAt(contextRange.start);
 
-  const pattern = new RegExp(GLOBAL_STATE.find, "gms");
   const posRanges: vscode.Range[] = [];
 
   let count = 0;

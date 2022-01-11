@@ -15,7 +15,7 @@ interface MessageStateDoReplace {
 export type Messages = MessageStateUpdate | MessageStateDoReplace;
 
 export interface RegexStateData {
-  pattern: string;
+  patterns: string[];
 
   find: string;
   replace: string;

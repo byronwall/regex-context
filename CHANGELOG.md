@@ -2,6 +2,11 @@
 
 All notable changes to the "regex-context" extension will be documented in this file.
 
+## [0.0.4]
+
+- Add initial support for nested contexts
+- Add images to the README to show interface
+
 ## [0.0.3]
 
 - Initial working version with ability to do find/replace inside a context

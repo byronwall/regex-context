@@ -21,7 +21,7 @@ function addDecorationToContext() {
   }
 
   // short circuit if not active
-  if (!GLOBAL_STATE.isActive || GLOBAL_STATE.pattern === "") {
+  if (!GLOBAL_STATE.isActive || GLOBAL_STATE.patterns[0] === "") {
     console.log("not active, remove all");
     activeEditor.setDecorations(decorationTypeContext, []);
     return;
@@ -51,8 +51,9 @@ function addDecorationToFind() {
   const posRanges = getContextPosRanges(activeEditor);
 
   // process those ranges for the find part
+  const pattern = new RegExp(GLOBAL_STATE.find, "gms");
   const findRanges = posRanges.flatMap((range) =>
-    getFindPosRanges(activeEditor!, range)
+    getFindPosRanges(activeEditor!, range, pattern)
   );
 
   const decorations = findRanges.map<vscode.DecorationOptions>((range) => ({
