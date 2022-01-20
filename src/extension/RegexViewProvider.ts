@@ -3,6 +3,7 @@ import * as ejs from "ejs";
 import { getNonce } from "./helpers";
 import { updateState } from "./state";
 import { doReplace } from "./regex";
+import { GLOBAL_STATE } from "./extension";
 
 interface MessageStateUpdate {
   type: "stateUpdate";
@@ -51,15 +52,37 @@ export class RegexViewProvider implements vscode.WebviewViewProvider {
       switch (data.type) {
         case "stateUpdate": {
           updateState(data.value);
-
           break;
         }
 
         case "doReplace": {
           doReplace();
+          break;
         }
       }
     });
+  }
+
+  public toggleActive() {
+    if (this._view) {
+      // showing the view seems required in order to get code to run in webview?
+      this._view.show?.(true);
+
+      // this message will be processed by the webview (which sends it back via another message)
+      // this madness is all about keeping the state synchronized
+      this._view.webview.postMessage({ type: "toggleActive" });
+    }
+  }
+
+  public updateState() {
+    if (this._view) {
+      // this message will be processed by the webview (which sends it back via another message)
+      // this madness is all about keeping the state synchronized
+      this._view.webview.postMessage({
+        type: "updateStateFromExt",
+        data: GLOBAL_STATE,
+      });
+    }
   }
 
   private async getHtmlForWebview(webview: vscode.Webview) {
@@ -89,11 +112,13 @@ export class RegexViewProvider implements vscode.WebviewViewProvider {
 
     webview.html = html;
   }
+
   private getUri(mediaFileName: string, folderName = "media") {
     return this._view?.webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, folderName, mediaFileName)
     );
   }
+
   private getSpecialUri(mediaFileName: string) {
     return this._view?.webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "out", "webview", mediaFileName)

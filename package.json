@@ -6,7 +6,7 @@
   "repository": "https://github.com/byronwall/regex-context",
   "license": "MIT",
   "icon": "resources/icons/regex.png",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.63.0"
   },
@@ -29,8 +29,9 @@
     },
     "commands": [
       {
-        "command": "regex-context.helloWorld",
-        "title": "Hello World"
+        "command": "regex-context.toggleActive",
+        "category": "Regex Context",
+        "title": "Toggle Active"
       }
     ],
     "viewsContainers": {

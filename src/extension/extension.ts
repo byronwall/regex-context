@@ -19,6 +19,12 @@ export const GLOBAL_STATE: RegexStateData = {
 export function activate(context: vscode.ExtensionContext) {
   activeEditor = window.activeTextEditor;
 
+  context.subscriptions.push(
+    vscode.commands.registerCommand("regex-context.toggleActive", () => {
+      provider.toggleActive();
+    })
+  );
+
   window.onDidChangeActiveTextEditor(
     (editor) => {
       activeEditor = editor;

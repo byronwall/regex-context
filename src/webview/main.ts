@@ -95,10 +95,20 @@ window.addEventListener("DOMContentLoaded", (event) => {
 window.addEventListener("message", (event) => {
   const message = event.data; // The json data that the extension sent
   switch (message.type) {
-    case "XXX":
+    case "toggleActive":
+      toggleIsActive();
+      break;
+    case "updateStateFromExt":
+      Object.assign(oldState, message.data);
+      updateDomFromState(oldState);
+
       break;
   }
 });
+
+function toggleIsActive() {
+  updateState("isActive", !oldState.isActive);
+}
 
 function handleAddBlankContext() {
   console.log("new context");
@@ -110,9 +120,8 @@ function handleAddBlankContext() {
 function updateDomFromState(oldState: RegexStateData) {
   console.log("XXX update dom from state", oldState);
 
-  document
-    .getElementById("btnPattern")
-    .setAttribute("checked", "" + oldState.isActive);
+  (document.getElementById("btnPattern") as HTMLInputElement).checked =
+    oldState.isActive;
 
   document.getElementById("txtFind").setAttribute("value", oldState.find);
 

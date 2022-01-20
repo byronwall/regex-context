@@ -42,7 +42,11 @@ function addDecorationToFind() {
   }
 
   // short circuit if not active
-  if (!GLOBAL_STATE.shouldShowFind || GLOBAL_STATE.find === "") {
+  if (
+    !GLOBAL_STATE.shouldShowFind ||
+    GLOBAL_STATE.find === "" ||
+    !GLOBAL_STATE.isActive
+  ) {
     console.log("not active, remove all");
     activeEditor.setDecorations(decorationTypeFind, []);
     return;
