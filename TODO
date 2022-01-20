@@ -1,11 +1,3 @@
-Proof of concept:
-    ☐ Need to create proper names for the commands
-    ☐ Create a WebView which is able to show some input boxes
-    ☐ Build the find context in the WebView
-    ☐ Build an initial replace mechanism in the WebView
-
-View related:
-    ☐ Figure out how to add to the find replace side bar
-    ☐ Add a text box for the context choice
-    ☐ Add some inputs for the find replace and other functions
-    ☐ Remove all of the `calicoColor` references
+Others:
+    ☐ Add a find mode which takes the results into a new document
+    ☐ Figure out how to persist webview state (or other state)

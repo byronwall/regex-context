@@ -6,8 +6,6 @@ All notable changes to the "regex-context" extension will be documented in this 
 
 - Improve text around the `isActive` checkbox
 - Add a command to toggle whether or not it's active -- show the view also
-- Planned
-  - Add a find mode which takes the results into a new document
 
 ## [0.0.4]
 
