@@ -20,8 +20,8 @@
     <h3>context</h3>
     <button id="btnAddContext">add context</button>
     <div>
-      <label for="btnPattern">is active?</label>
-      <input type="checkbox" id="btnPattern" checked="true" />
+      <label for="chkPattern">is active?</label>
+      <input type="checkbox" id="chkPattern" checked="true" />
     </div>
 
     <div id="contextCtr"></div>
@@ -36,6 +36,18 @@
     </div>
     <div>
       <button id="btnReplace">replace</button>
+    </div>
+    <h3>extract</h3>
+    <div class="flex-col">
+      <p>extract each matching context as a line in a new document</p>
+      <button id="btnExtractCtx">extract context...</button>
+    </div>
+    <div class="flex-col">
+      <p>
+        extract each matching find item (inside a context) as a line in a new
+        document
+      </p>
+      <button id="btnExtractFind">extract finds...</button>
     </div>
 
     <script nonce="<%= nonce %>">

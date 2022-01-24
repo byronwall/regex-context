@@ -1,3 +1,4 @@
+import path = require("path");
 import * as vscode from "vscode";
 import { activeEditor, GLOBAL_STATE } from "./extension";
 
@@ -104,4 +105,56 @@ export function doReplace() {
       editBuilder.replace(ctxRange, newText);
     }
   });
+}
+
+export function doExtractFind() {
+  if (!activeEditor || !activeEditor.document || !vscode.window) {
+    return;
+  }
+
+  // determine the context ranges
+  const posRanges = getContextPosRanges(activeEditor);
+
+  const allText = posRanges
+    .map((rng) => {
+      const text = activeEditor!.document.getText(rng);
+
+      // need to add the start in since we are only looking at a subset of text
+      const pattern = new RegExp(GLOBAL_STATE.find, "gms");
+
+      const allMatches = text.match(pattern)?.[0] ?? "";
+
+      return allMatches;
+    })
+    .filter((c) => c !== "");
+
+  const newFileText = allText.join("\n");
+
+  vscode.workspace
+    .openTextDocument({ content: newFileText, language: "txt" })
+    .then((document) => {
+      vscode.window.showTextDocument(document);
+    });
+}
+export function doExtractCtx() {
+  if (!activeEditor || !activeEditor.document || !vscode.window) {
+    return;
+  }
+
+  // determine the context ranges
+  const posRanges = getContextPosRanges(activeEditor);
+
+  const allText = posRanges.map((rng) => {
+    const text = activeEditor!.document.getText(rng);
+
+    return text;
+  });
+
+  const newFileText = allText.join("\n");
+
+  vscode.workspace
+    .openTextDocument({ content: newFileText, language: "txt" })
+    .then((document) => {
+      vscode.window.showTextDocument(document);
+    });
 }

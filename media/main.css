@@ -55,3 +55,9 @@ button {
 .flex input[type="checkbox"] {
   flex: 0;
 }
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

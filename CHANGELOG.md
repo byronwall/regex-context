@@ -2,6 +2,10 @@
 
 All notable changes to the "regex-context" extension will be documented in this file.
 
+## [0.0.6] -- 2022-01-23 22:49:20
+
+- Add support for extracting the contexts or the found sections within a context
+
 ## [0.0.5] -- 2022-01-19 22:03:42
 
 - Improve text around the `isActive` checkbox

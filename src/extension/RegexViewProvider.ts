@@ -2,18 +2,23 @@ import * as vscode from "vscode";
 import * as ejs from "ejs";
 import { getNonce } from "./helpers";
 import { updateState } from "./state";
-import { doReplace } from "./regex";
+import { doExtractCtx, doExtractFind, doReplace } from "./regex";
 import { GLOBAL_STATE } from "./extension";
 
-interface MessageStateUpdate {
-  type: "stateUpdate";
-  value: RegexStateData;
-}
-interface MessageStateDoReplace {
-  type: "doReplace";
-}
-
-export type Messages = MessageStateUpdate | MessageStateDoReplace;
+export type Messages =
+  | {
+      type: "stateUpdate";
+      value: RegexStateData;
+    }
+  | {
+      type: "doReplace";
+    }
+  | {
+      type: "doExtractCtx";
+    }
+  | {
+      type: "doExtractFinds";
+    };
 
 export interface RegexStateData {
   patterns: string[];
@@ -57,6 +62,16 @@ export class RegexViewProvider implements vscode.WebviewViewProvider {
 
         case "doReplace": {
           doReplace();
+          break;
+        }
+
+        case "doExtractCtx": {
+          doExtractCtx();
+          break;
+        }
+
+        case "doExtractFinds": {
+          doExtractFind();
           break;
         }
       }

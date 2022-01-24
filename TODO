@@ -1,3 +1,4 @@
 Others:
-    ☐ Add a find mode which takes the results into a new document
+    ✔ Add a find mode which takes the results into a new document @done(22-01-23 22:50)
+    ☐ Add a split mode which can find text and split it out into a new document
     ☐ Figure out how to persist webview state (or other state)

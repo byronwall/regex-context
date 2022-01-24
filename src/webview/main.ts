@@ -39,6 +39,14 @@ function updateState<K extends keyof RegexStateData>(
   updateDomFromState(oldState);
 }
 
+function handleExtractContext() {
+  vscode.postMessage({ type: "doExtractCtx", value: oldState });
+}
+
+function handleExtractFinds() {
+  vscode.postMessage({ type: "doExtractFinds", value: oldState });
+}
+
 function handleReplaceClick() {
   vscode.postMessage({ type: "doReplace", value: oldState });
 }
@@ -47,7 +55,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
   console.log("DOM fully loaded and parsed");
 
   document
-    .getElementById("btnPattern")
+    .getElementById("chkPattern")
     ?.addEventListener("change", (event: any) => {
       const newCheckedState = (event.target as any).checked;
 
@@ -82,6 +90,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
   document.getElementById("btnReplace")?.addEventListener("click", () => {
     handleReplaceClick();
+  });
+  document.getElementById("btnExtractCtx")?.addEventListener("click", () => {
+    handleExtractContext();
+  });
+  document.getElementById("btnExtractFind")?.addEventListener("click", () => {
+    handleExtractFinds();
   });
 
   document.getElementById("btnAddContext")?.addEventListener("click", () => {
@@ -120,7 +134,7 @@ function handleAddBlankContext() {
 function updateDomFromState(oldState: RegexStateData) {
   console.log("XXX update dom from state", oldState);
 
-  (document.getElementById("btnPattern") as HTMLInputElement).checked =
+  (document.getElementById("chkPattern") as HTMLInputElement).checked =
     oldState.isActive;
 
   document.getElementById("txtFind").setAttribute("value", oldState.find);
